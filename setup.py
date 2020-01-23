@@ -17,7 +17,7 @@ setuptools.setup(
     description="A small package including time series functionalities",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/kS-100/home/tree/master/timeseries",
+    url="https://github.com/kS-100/hda_project",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
