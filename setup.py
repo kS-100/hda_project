@@ -11,7 +11,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="time-series-hda-ds-WS1920", # Replace with your own username
-    version="0.0.6",
+    version="0.0.5",
     author="project group",
     author_email="Karen.Schulz@stud.h-da.de",
     description="A small package including time series functionalities",
