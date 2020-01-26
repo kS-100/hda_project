@@ -49,6 +49,7 @@ def get_model_scores(model, x_train, y_train, x_test, y_test, print_values=True)
             scores[regression_score] = [score_train, score_test]
         except:
             print("Could not calculate score", regression_score)
+            print("------------------------------------------------------------")
             scores[regression_score] = [None, None]
     return scores
 
