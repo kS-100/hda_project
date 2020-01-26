@@ -1,9 +1,9 @@
 import pandas as pd
-import dask as dd
 from tqdm.notebook import tqdm as tqdm
 import multiprocessing
 from functools import reduce
 import numpy as np
+from tsfresh.feature_extraction.settings import MinimalFCParameters
 
 def get_sub_timeseries(df_x, index, window_start, window_end, identifier):
     """
@@ -62,24 +62,25 @@ def get_rolling_timeseries(df_x, start_index, lag, window_start, window_end):
                     index=i,
                     window_start=window_start,
                     window_end=window_end,
-                    identifier=i - start_index) for i in
+                    identifier=i - start_index -1) for i in
                tqdm(range(start_index, len(df_x) - lag))]
-    return sub_dfs
+    sub_df_x_comp = pd.concat([df for df in tqdm(sub_dfs)], ignore_index=True)
+    return sub_df_x_comp
 
-
-def extract_sub_window(df_x, y, window, start_index, lag, fc_parameters, n_jobs=-1, npartitions=None):
+def extract_sub_window(df_x, y, window, start_index, lag, fc_parameters=MinimalFCParameters(), n_jobs=-1):
     from tsfresh import extract_relevant_features
     window_start, window_end = window
-    sub_df_x = get_rolling_timeseries(df_x, start_index, lag, window_start, window_end, npartitions)
+    sub_df_x = get_rolling_timeseries(df_x, start_index, lag, window_start, window_end)
     if n_jobs == -1:
         n_jobs = multiprocessing.cpu_count()
+    y = y[y.index.isin(sub_df_x.window_id)]
     features = extract_relevant_features(sub_df_x, y, column_id="window_id", column_sort="timestamp", column_value=None,
                                          default_fc_parameters=fc_parameters, n_jobs=n_jobs)
     features = features.add_suffix(f"_{window_start}_{window_end}")
-    return features
+    return (features, y)
 
 
-def extract_sub_windows(df_x, df_y, window_array, lag, fc_parameters, n_jobs=-1, npartitions=None):
+def extract_sub_windows(df_x, df_y, window_array, lag, fc_parameters, n_jobs=-1):
     df_x = df_x.reset_index('timestamp')
 
     split_func = lambda x: list(map(int, x.split("-")))
