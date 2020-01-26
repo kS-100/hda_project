@@ -2,6 +2,7 @@ import pandas as pd
 import dask as dd
 from tqdm.notebook import tqdm as tqdm
 import multiprocessing
+from tsfresh import extract_relevant_features
 from functools import reduce
 import numpy as np
 import dask.dataframe as dd
@@ -71,8 +72,7 @@ def get_rolling_timeseries(df_x, start_index, lag, window_start, window_end):
     return sub_df_x_comp
 
 
-def extract_sub_window(df_x, y, window, start_index, lag, fc_parameters, n_jobs=-1, npartitions=None):    
-    from tsfresh import extract_relevant_features
+def extract_sub_window(df_x, y, window, start_index, lag, fc_parameters, n_jobs=-1, npartitions=None):
     window_start, window_end = window
     sub_df_x = get_rolling_timeseries(df_x, start_index, lag, window_start, window_end, npartitions)
     if n_jobs == -1:
