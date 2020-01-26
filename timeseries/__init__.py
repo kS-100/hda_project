@@ -8,7 +8,9 @@ from .model.model_manager import (
         create_model_folder,
         get_model_path, 
         get_model_scores,
-        evaluate_and_persist_model,
+        evaluate_model,
+        persist_model,
+        load_model,
         create_model_comparison_notebook,
         )
 
@@ -23,7 +25,3 @@ from .feature_extraction.timeseries_feature_extraction import(
         extract_sub_window,
         extract_sub_windows,
         )
-
-#from .test.feature_extraction import(
-#        
-#        )
