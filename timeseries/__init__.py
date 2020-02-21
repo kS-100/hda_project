@@ -15,7 +15,8 @@ from .model.model_manager import (
         )
 
 from .plot.figures import(
-        plot_timeseries,
+        plot_timeseries_single,
+        plot_timeseries_multiple,
         plot_distribution,
         )
 
