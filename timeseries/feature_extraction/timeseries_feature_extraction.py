@@ -3,7 +3,6 @@ from tqdm.notebook import tqdm as tqdm
 import multiprocessing
 from functools import reduce
 import numpy as np
-from tsfresh.feature_extraction.settings import MinimalFCParameters
 
 def get_sub_timeseries(df_x, index, window_start, window_end, identifier):
     """
@@ -67,8 +66,13 @@ def get_rolling_timeseries(df_x, start_index, lag, window_start, window_end):
     sub_df_x_comp = pd.concat([df for df in tqdm(sub_dfs)], ignore_index=True)
     return sub_df_x_comp
 
-def extract_sub_window(df_x, y, window, start_index, lag, fc_parameters=MinimalFCParameters(), n_jobs=-1):
+def extract_sub_window(df_x, y, window, start_index, lag, fc_parameters="min", n_jobs=-1):
     from tsfresh import extract_relevant_features
+    from tsfresh.feature_extraction.settings import MinimalFCParameters
+
+    if fc_parameters == "min":
+        fc_parameters = MinimalFCParameters()
+
     window_start, window_end = window
     sub_df_x = get_rolling_timeseries(df_x, start_index, lag, window_start, window_end)
     if n_jobs == -1:
